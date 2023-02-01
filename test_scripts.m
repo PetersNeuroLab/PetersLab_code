@@ -20,6 +20,6 @@ axis image;
 [U,Vrec,im_avg_color,frame_info] = AP_preprocess_widefield_hc('C:\Users\peterslab\Documents\MATLAB\centre_ROI');
 
 %% Face camera preprocessing function
-[timestamps, frame_num, flipper_signal] = AP_preprocess_face_camera('C:\Users\peterslab\Documents\MATLAB\face_camera', 2);
+[timestamps, frame_num, flipper_signal] = AP_preprocess_face_camera("C:\Users\peterslab\Documents\MATLAB\face_camera\mmmgui_test\face.avi", 2);
 
 

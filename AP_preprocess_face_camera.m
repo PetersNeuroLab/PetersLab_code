@@ -1,15 +1,16 @@
-function [timestamps, frame_num, flipper_signal] = AP_preprocess_face_camera(video_path, pin_num)
+function [timestamps, frame_num, flipper_signal] = AP_preprocess_face_camera(video_fn, pin_num)
 % [timestamps, frame_num, flipper_signal] = AP_preprocess_face_camera(video_file, pin_num)
 %
 % Get embedded info from face camera videos
 
-%% Probably want to add how to find the video in the folder too! - once we have a set name for it
-video_file = dir(fullfile(video_path,'*.avi'));
-video_fn = fullfile(video_path,video_file.name);
+% %% Probably want to add how to find the video in the folder too! - once we have a set name for it
+% video_file = dir(fullfile(video_path,'*.avi'));
+% video_fn = fullfile(video_path,video_file.name);
 
 %% Read Video
 video_object = VideoReader(video_fn);
 video = read(video_object); % last dim is frame number: (h,w,channel,frame_num)
+n_frames = size(video,4);
 
 %% Extract embedded pixels
 % get the first row, 12 pixels, from all frames + change order so it's not
@@ -20,8 +21,8 @@ embed_pixels = permute(video(1,1:12,1,:), [2,4,1,3]);
 
 %%  Get timestamp from the first 4 pixels
 timestamp_pixels = embed_pixels(1:4,:);
-bin_val_pixels = dec2bin(timestamp_pixels);
-bin_val_pixels = reshape(bin_val_pixels', 32, [])';
+bin_val_pixels = dec2bin(timestamp_pixels, 8);
+bin_val_pixels = reshape(bin_val_pixels', 32, n_frames)';
 
 % timestamp value that we can use is only in the first 20 bits
 timestamp_bin_val = bin_val_pixels(:, 1:20);
@@ -43,8 +44,8 @@ timestamps = seconds - seconds(1);
 
 %% FrameCounter
 frame_num_pixels = embed_pixels(5:8,:);
-bin_val_pixels = dec2bin(frame_num_pixels);
-bin_val_pixels = reshape(bin_val_pixels', 32, [])';
+bin_val_pixels = dec2bin(frame_num_pixels, 8);
+bin_val_pixels = reshape(bin_val_pixels', 32, n_frames)';
 frame_num = bin2dec(bin_val_pixels);
 frame_num = frame_num - frame_num(1) + 1;
 % can check length of this against the big frame number + can check if
@@ -52,7 +53,7 @@ frame_num = frame_num - frame_num(1) + 1;
 
 %% GPIO Pin State
 pin_state_pixels = embed_pixels(9:end,:);
-bin_val_pixels = dec2bin(pin_state_pixels);
-bin_val_pixels = reshape(bin_val_pixels', [], length(frame_num))';
-flipper_signal = bin_val_pixels(:,pin_num);
+bin_val_pixels = dec2bin(pin_state_pixels, 8);
+bin_val_pixels = reshape(bin_val_pixels', 32, length(frame_num))';
+flipper_signal = bin_val_pixels(:, pin_num+1); % pin numbering starts from 0 
 
