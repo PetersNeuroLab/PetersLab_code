@@ -456,8 +456,8 @@
               <FileNameRFMapStim>NoiseLocations.bin</FileNameRFMapStim>
               <Rate>0.1</Rate>
               <EndDelay>PT10S</EndDelay>
-              <InitDelay>PT0S</InitDelay>
-              <MappingTime>PT0S</MappingTime>
+              <InitDelay>PT10S</InitDelay>
+              <MappingTime>PT1M</MappingTime>
             </Expression>
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="rx:SubscribeWhen" />
