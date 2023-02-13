@@ -1,25 +1,35 @@
-function [timestamps, frame_num, flipper_signal] = AP_preprocess_face_camera(video_fn, pin_num)
-% [timestamps, frame_num, flipper_signal] = AP_preprocess_face_camera(video_file, pin_num)
+function [timestamps, frame_num, flipper] = AP_preprocess_face_camera(embed_pixels, pin_num)
+% [timestamps, frame_num, flipper] = AP_preprocess_face_camera(video_file, pin_num)
 %
 % Get embedded info from face camera videos
 
 % %% Probably want to add how to find the video in the folder too! - once we have a set name for it
 % video_file = dir(fullfile(video_path,'*.avi'));
 % video_fn = fullfile(video_path,video_file.name);
+%
+% Embedded information: each component is 4 pixels (40 total)
+% (from: https://www.flir.co.uk/support-center/iis/machine-vision/knowledge-base/embedding-frame-specific-data-into-the-first-n-pixels-of-an-image/)
+% Timestamp
+% Gain 
+% Shutter
+% Brightness
+% Exposure
+% White Balance
+% Frame Counter
+% Strobe pattern
+% GPIO Pin State
+% ROI position
 
-%% Read Video
-video_object = VideoReader(video_fn);
-video = read(video_object); % last dim is frame number: (h,w,channel,frame_num)
-n_frames = size(video,4);
+% TO DO - update the indicies now that everything is embedded
 
-%% Extract embedded pixels
-% get the first row, 12 pixels, from all frames + change order so it's not
-% 4D for no reason + get rid of extra channels
-% I think camera by default produces RGB channels - there's an extra dim of
-% length 3 so I'll just pick one, they're all the same (I checked)
-embed_pixels = permute(video(1,1:12,1,:), [2,4,1,3]);
+% Requires embed_pixels which is 40 (4px x 10 items) x n frames
 
-%%  Get timestamp from the first 4 pixels
+%% Embedded pixels
+
+n_frames = size(embed_pixels,2);
+
+%%  Timestamp
+
 timestamp_pixels = embed_pixels(1:4,:);
 bin_val_pixels = dec2bin(timestamp_pixels, 8);
 bin_val_pixels = reshape(bin_val_pixels', 32, n_frames)';
@@ -39,21 +49,24 @@ for i=1:length(reset_counter_idx)
     seconds(reset_counter_idx(i):end) = seconds(reset_counter_idx(i):end) + 128;
 end % can replace this with a recursive function??? 
 
-% start from 0 instead of random value 
-timestamps = seconds - seconds(1);
+% report timestamp in seconds
+timestamps = seconds';
 
-%% FrameCounter
-frame_num_pixels = embed_pixels(5:8,:);
+%% Frame counter
+
+frame_num_pixels = embed_pixels(25:28,:);
 bin_val_pixels = dec2bin(frame_num_pixels, 8);
 bin_val_pixels = reshape(bin_val_pixels', 32, n_frames)';
 frame_num = bin2dec(bin_val_pixels);
-frame_num = frame_num - frame_num(1) + 1;
-% can check length of this against the big frame number + can check if
-% consecutive
 
-%% GPIO Pin State
-pin_state_pixels = embed_pixels(9:end,:);
+%% GPIO pin states
+
+pin_state_pixels = embed_pixels(33:36,:);
 bin_val_pixels = dec2bin(pin_state_pixels, 8);
-bin_val_pixels = reshape(bin_val_pixels', 32, length(frame_num))';
-flipper_signal = bin_val_pixels(:, pin_num+1); % pin numbering starts from 0 
+bin_val_pixels = reshape(bin_val_pixels', 32, n_frames)';
+flipper = logical(str2num(bin_val_pixels(:, pin_num+1))); % pin numbering starts from 0 
+
+
+
+
 
