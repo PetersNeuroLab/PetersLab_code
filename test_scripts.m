@@ -22,4 +22,7 @@ axis image;
 %% Face camera preprocessing function
 [timestamps, frame_num, flipper_signal] = AP_preprocess_face_camera("C:\Users\peterslab\Documents\MATLAB\face_camera\mmmgui_test\face.avi", 2);
 
+%% Test wave save function
+AM_save_h_file(trp_wave, 'sq_wave')
+AM_save_h_file(trp_wave, 'trp_wave')
 
