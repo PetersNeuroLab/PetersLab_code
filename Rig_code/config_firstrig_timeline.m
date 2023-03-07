@@ -43,8 +43,8 @@ clearvars -except timeline
 
 % save to "hardware" file
 %%%%%%% ANDRADA: EDIT THIS TO BE LOCAL
-save('\\zserver.cortexlab.net\Code\Rigging\config\LILRIG-TIMELINE\hardware.mat')
-disp('Saved LILRIG-TIMELINE config file')
+save('C:\Users\peterslab\Documents\MATLAB\Code\RigConfig\win-ap004\hardware.mat')
+disp('Saved FIRSTRIG-TIMELINE config file')
 
 
 
