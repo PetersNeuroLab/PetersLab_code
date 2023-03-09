@@ -62,7 +62,7 @@ while(1)
     end
 
     % send stop to bonsai
-    bonsai_oscsend(u,'/stop',"localhost",50004,'i',45);
+    bonsai_oscsend(u,'/stop',"localhost",30000,'i',45);
 
     % get message from Bonsai stopping
     getlastmessage=osclistener.getMessageArgumentsAsDouble();
