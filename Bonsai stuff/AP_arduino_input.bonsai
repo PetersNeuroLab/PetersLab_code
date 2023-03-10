@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<WorkflowBuilder Version="2.7.0"
+<WorkflowBuilder Version="2.7.1"
                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                  xmlns:io="clr-namespace:Bonsai.IO;assembly=Bonsai.System"
                  xmlns:gl="clr-namespace:Bonsai.Shaders;assembly=Bonsai.Shaders"
@@ -17,7 +17,7 @@
             <Expression xsi:type="Combinator">
               <Combinator xsi:type="io:CreateSerialPort">
                 <io:Name>ArduinoInput</io:Name>
-                <io:PortName>COM6</io:PortName>
+                <io:PortName>COM5</io:PortName>
                 <io:BaudRate>250000</io:BaudRate>
                 <io:Encoding>utf-8</io:Encoding>
                 <io:Parity>None</io:Parity>
@@ -81,7 +81,7 @@ def process(value):
             <Expression xsi:type="MemberSelector">
               <Selector>Item3</Selector>
             </Expression>
-            <Expression xsi:type="MulticastSubject">
+            <Expression xsi:type="rx:PublishSubject">
               <Name>SyncPulse</Name>
             </Expression>
             <Expression xsi:type="MemberSelector">
@@ -94,7 +94,7 @@ def process(value):
               <Combinator xsi:type="rx:Zip" />
             </Expression>
             <Expression xsi:type="scr:ExpressionTransform">
-              <scr:Expression>new(Item1 as Wheel, Item2 as Lick, Item3 as Sync, Item4 as QuadState, Item5 as EyeFrameCount, Item6 as Time, Item7 as Position)</scr:Expression>
+              <scr:Expression>new(Item1 as Wheel, Item2 as Lick, Item3 as Sync)</scr:Expression>
             </Expression>
             <Expression xsi:type="IncludeWorkflow" Path="BonVision:Logging.LogEvent.bonsai">
               <Format xsi:nil="true" />
@@ -131,6 +131,13 @@ def process(value):
       </Expression>
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="gl:RenderFrame" />
+      </Expression>
+      <Expression xsi:type="IncludeWorkflow" Path="BonVision:Logging.EventLogger.bonsai">
+        <Name>Events</Name>
+        <FileName />
+        <Append>false</Append>
+        <Overwrite>false</Overwrite>
+        <Suffix>None</Suffix>
       </Expression>
     </Nodes>
     <Edges>

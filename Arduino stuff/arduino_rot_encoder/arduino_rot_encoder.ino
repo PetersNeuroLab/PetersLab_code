@@ -10,8 +10,8 @@
 #include <Event.h>
 #include <Timer.h>
 
-#define encoder0PinA 2        // sensor A of rotary encoder
-#define encoder0PinB 3        // sensor B of rotary encoder
+#define encoder0PinA 11        // sensor A of rotary encoder
+#define encoder0PinB 12        // sensor B of rotary encoder
 #define LickPin 5             // digital pin of lick detector
 #define SValvePin 1           // digital pin controlling the solenoid valve
 
