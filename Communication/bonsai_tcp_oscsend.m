@@ -1,9 +1,9 @@
-function bonsai_oscread(u,path,dest_IP,dest_port,varargin)
-% Sends a Open Sound Control (OSC) message through a UDP connection
+function bonsai_tcp_oscsend(u,path,varargin)
+% Sends a Open Sound Control (OSC) message through a TCP connection
 %
-% oscsend(u,path,dest_IP,dest_port)
-% oscsend(u,path,dest_IP,dest_port,types,arg1,arg2,...)
-% oscsedn(u,path,dest_IP,dest_port,types,[args])
+% oscsend(u,path)
+% oscsend(u,path,types,arg1,arg2,...)
+% oscsedn(u,path,types,[args])
 %
 % u = UDP object with open connection.
 % path = path-string
@@ -75,7 +75,7 @@ function bonsai_oscread(u,path,dest_IP,dest_port,varargin)
     
     %write data to UDP
     data = [oscstr(path) types data];
-    write(u,data,dest_IP,dest_port);
+    write(u,data);
 end
 
 %Conversion from double to float
