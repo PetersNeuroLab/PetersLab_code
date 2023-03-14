@@ -455,7 +455,7 @@ Value = whhel_radius for wheel_perim</Description>
               </PropertyMappings>
             </Expression>
             <Expression xsi:type="IncludeWorkflow" Path="BonVision:Primitives.DrawGratings.bonsai">
-              <LocationX>-73.828125</LocationX>
+              <LocationX>-928.125</LocationX>
               <LocationY>0</LocationY>
               <Layer>0</Layer>
               <Angle>0</Angle>
