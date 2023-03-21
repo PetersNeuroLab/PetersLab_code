@@ -9,10 +9,10 @@ const int goPin = 0; // pin for experiment
 
 const int cameraOutPin = 29;
 
-const int cameraInPin = 30;    // pin for "all lines exposing"
-const int blueOutPin = 24;       // pin for blue's Gate1
-const int purpleOutPin = 25;       // pin for purple's Gate1
-
+const int cameraInPin = 30;       // pin for "all lines exposing"
+const int blueOutPin = 24;        // pin for blue's Gate1
+const int violetOutPin = 25;      // pin for purple's Gate1
+const uint8_t rampLightPin = A21;  // pin for ramping light
 
 int flipflopState = 0;        
 int lastPCOstate = 0;
@@ -23,14 +23,14 @@ void setup() {
   pinMode(goPin, INPUT);
   pinMode(cameraInPin, INPUT);
   pinMode(blueOutPin, OUTPUT);
-  pinMode(purpleOutPin, OUTPUT);
+  pinMode(violetOutPin, OUTPUT);
   Serial.begin(9600);
   flipflopState = 0;
 
   analogWriteResolution(12);
 
-  pinMode(A22,OUTPUT);
-  analogWrite(A22,0);
+  pinMode(rampLightPin,OUTPUT);
+  analogWrite(rampLightPin,0);
 
   pinMode(cameraOutPin,OUTPUT);
   analogWrite(cameraOutPin,0);
@@ -38,13 +38,13 @@ void setup() {
 
 void loop() {
 
-  // if (digitalRead(goPin)==HIGH) {
-    analogWrite(cameraOutPin, waveformsTable_sq_wave[i]);  // write the selected waveform on DAC
+  if (digitalRead(goPin)==HIGH) {
+    digitalWrite(cameraOutPin, waveformsTable_sq_wave[i]);  // write the selected waveform on DAC
     i++;
     if (i==512)
       i=0;
 
-    analogWrite(A22, waveformsTable_trp_wave[j]);  // write the selected waveform on DAC
+    analogWrite(rampLightPin, waveformsTable_trp_wave[j]);  // write the selected waveform on DAC
     j++;
     if (j==512)
       j=0;
@@ -58,14 +58,22 @@ void loop() {
 
       if (flipflopState==0) {
         digitalWrite(blueOutPin, HIGH);
-        digitalWrite(purpleOutPin, LOW);
+        digitalWrite(violetOutPin, LOW);
       } else {
         digitalWrite(blueOutPin, LOW);
-        digitalWrite(purpleOutPin, HIGH);
+        digitalWrite(violetOutPin, HIGH);
       }
     }
 
     lastPCOstate = currentPCOstate;
-  // }
+
+  } else {
+    // If GO pin is low, write all pins to low
+    digitalWrite(blueOutPin, LOW);
+    digitalWrite(violetOutPin, LOW);
+    digitalWrite(cameraOutPin, LOW);
+    analogWrite(rampLightPin,0);
+    flipflopState = 0;
+  }
 
 }
