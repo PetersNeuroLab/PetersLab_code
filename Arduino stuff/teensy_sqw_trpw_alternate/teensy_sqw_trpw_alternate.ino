@@ -38,7 +38,7 @@ void setup() {
 
 void loop() {
 
-  if (digitalRead(goPin)==HIGH) {
+  // if (digitalRead(goPin)==HIGH) {
     analogWrite(cameraOutPin, waveformsTable_sq_wave[i]);  // write the selected waveform on DAC
     i++;
     if (i==512)
@@ -66,6 +66,6 @@ void loop() {
     }
 
     lastPCOstate = currentPCOstate;
-  }
+  // }
 
 }
