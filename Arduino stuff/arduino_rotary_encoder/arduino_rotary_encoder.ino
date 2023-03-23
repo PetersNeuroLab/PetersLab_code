@@ -17,7 +17,7 @@ void setup() {
   pinMode(encoder0PinB, INPUT);   // rotary encoder sensor B
 
   // interrupts for rotary encoder
-  attachInterrupt(digitalPinToInterrupt(encoder0PinA), doEncoderA, RISING);
+  attachInterrupt(digitalPinToInterrupt(encoder0PinA), doEncoderA, FALLING);
 
   Serial.begin (250000);
   Serial.setTimeout(5);
@@ -31,7 +31,7 @@ void loop() {
 
 // Interrupt on A low to high transition
 void doEncoderA() {
-    if (digitalRead(encoder0PinB)==HIGH) {
+    if (digitalRead(encoder0PinB)==LOW) {
       encoder0Pos = 1;
     }
     else {
