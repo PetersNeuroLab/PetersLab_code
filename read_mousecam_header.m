@@ -1,5 +1,5 @@
 function [timestamps, frame_num, flipper] = read_mousecam_header(embed_pixels, pin_num)
-% [timestamps, frame_num, flipper] = AP_preprocess_face_camera(video_file, pin_num)
+% [timestamps, frame_num, flipper] = read_mousecam_header(video_file, pin_num)
 %
 % Get embedded info from face camera videos
 
