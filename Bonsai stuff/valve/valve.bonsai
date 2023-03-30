@@ -3,15 +3,15 @@
                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                  xmlns:io="clr-namespace:Bonsai.IO;assembly=Bonsai.System"
                  xmlns:rx="clr-namespace:Bonsai.Reactive;assembly=Bonsai.Core"
+                 xmlns:ipy="clr-namespace:Bonsai.Scripting.IronPython;assembly=Bonsai.Scripting.IronPython"
                  xmlns="https://bonsai-rx.org/2018/workflow">
   <Workflow>
     <Nodes>
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="io:CreateSerialPort">
-          <io:Name>ArduinoInput</io:Name>
-          <io:PortName>COM8</io:PortName>
+          <io:Name>myArduino</io:Name>
+          <io:PortName>COM4</io:PortName>
           <io:BaudRate>250000</io:BaudRate>
-          <io:Encoding>utf-8</io:Encoding>
           <io:Parity>None</io:Parity>
           <io:ParityReplace>63</io:ParityReplace>
           <io:DataBits>8</io:DataBits>
@@ -23,6 +23,27 @@
           <io:ReadBufferSize>4096</io:ReadBufferSize>
           <io:WriteBufferSize>2048</io:WriteBufferSize>
           <io:ReceivedBytesThreshold>1</io:ReceivedBytesThreshold>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="io:SerialStringRead">
+          <io:PortName>myArduino</io:PortName>
+          <io:NewLine>\r\n</io:NewLine>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="SubscribeSubject">
+        <Name>OpenValve</Name>
+      </Expression>
+      <Expression xsi:type="ipy:PythonTransform">
+        <ipy:Name>MakeString</ipy:Name>
+        <ipy:Script>@returns(str)
+def process(value):
+  return str.format("{0}", value)</ipy:Script>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="io:SerialStringWrite">
+          <io:PortName>myArduino</io:PortName>
+          <io:NewLine>\r\n</io:NewLine>
         </Combinator>
       </Expression>
       <Expression xsi:type="Combinator">
@@ -48,31 +69,19 @@
         <Combinator xsi:type="rx:CombineLatest" />
       </Expression>
       <Expression xsi:type="Multiply" />
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="StringProperty" />
-      </Expression>
       <Expression xsi:type="rx:BehaviorSubject">
         <Name>OpenValve</Name>
       </Expression>
-      <Expression xsi:type="SubscribeSubject">
-        <Name>OpenValve</Name>
-      </Expression>
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="io:SerialStringWrite">
-          <io:PortName>ArduinoInput</io:PortName>
-          <io:NewLine>\r\n</io:NewLine>
-        </Combinator>
-      </Expression>
     </Nodes>
     <Edges>
-      <Edge From="1" To="2" Label="Source1" />
-      <Edge From="3" To="6" Label="Source2" />
-      <Edge From="4" To="5" Label="Source1" />
+      <Edge From="2" To="3" Label="Source1" />
+      <Edge From="3" To="4" Label="Source1" />
       <Edge From="5" To="6" Label="Source1" />
-      <Edge From="6" To="7" Label="Source1" />
-      <Edge From="7" To="8" Label="Source1" />
+      <Edge From="7" To="10" Label="Source2" />
       <Edge From="8" To="9" Label="Source1" />
+      <Edge From="9" To="10" Label="Source1" />
       <Edge From="10" To="11" Label="Source1" />
+      <Edge From="11" To="12" Label="Source1" />
     </Edges>
   </Workflow>
 </WorkflowBuilder>

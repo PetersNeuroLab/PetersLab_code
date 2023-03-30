@@ -8,8 +8,8 @@
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="io:CreateSerialPort">
           <io:Name>myArduino</io:Name>
-          <io:PortName>COM3</io:PortName>
-          <io:BaudRate>9600</io:BaudRate>
+          <io:PortName>COM4</io:PortName>
+          <io:BaudRate>250000</io:BaudRate>
           <io:Parity>None</io:Parity>
           <io:ParityReplace>63</io:ParityReplace>
           <io:DataBits>8</io:DataBits>
@@ -29,7 +29,20 @@
           <io:NewLine>\r\n</io:NewLine>
         </Combinator>
       </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="StringProperty">
+          <Value>lala</Value>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="io:SerialStringWrite">
+          <io:PortName>myArduino</io:PortName>
+          <io:NewLine>\r\n</io:NewLine>
+        </Combinator>
+      </Expression>
     </Nodes>
-    <Edges />
+    <Edges>
+      <Edge From="2" To="3" Label="Source1" />
+    </Edges>
   </Workflow>
 </WorkflowBuilder>
