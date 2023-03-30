@@ -7,7 +7,7 @@
 
 #define encoder0PinA 3        // sensor A of rotary encoder
 #define encoder0PinB 7        // sensor B of rotary encoder
-#define SValvePin 1           // digital pin controlling the solenoid valve
+#define SValvePin 2           // digital pin controlling the solenoid valve
 
 
 // variables for rotary encoder
@@ -43,6 +43,8 @@ void loop() {
 
   GetBonsaiInput();
   ActivatePV();
+
+  delay(1);
 
 }
 
