@@ -9,7 +9,7 @@
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="io:CreateSerialPort">
           <io:Name>ArduinoInput</io:Name>
-          <io:PortName>COM5</io:PortName>
+          <io:PortName>COM8</io:PortName>
           <io:BaudRate>250000</io:BaudRate>
           <io:Encoding>utf-8</io:Encoding>
           <io:Parity>None</io:Parity>
@@ -25,6 +25,14 @@
           <io:ReceivedBytesThreshold>1</io:ReceivedBytesThreshold>
         </Combinator>
       </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="FloatProperty">
+          <Value>6</Value>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="rx:BehaviorSubject">
+        <Name>RewardAmount</Name>
+      </Expression>
       <Expression xsi:type="SubscribeSubject">
         <Name>RewardAmount</Name>
       </Expression>
@@ -33,7 +41,7 @@
       </Expression>
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="FloatProperty">
-          <Value>1</Value>
+          <Value>100</Value>
         </Combinator>
       </Expression>
       <Expression xsi:type="Combinator">
@@ -52,25 +60,17 @@
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="io:SerialStringWrite">
           <io:PortName>ArduinoInput</io:PortName>
-          <io:NewLine>\r</io:NewLine>
+          <io:NewLine>\r\n</io:NewLine>
         </Combinator>
-      </Expression>
-      <Expression xsi:type="Combinator">
-        <Combinator xsi:type="FloatProperty">
-          <Value>6</Value>
-        </Combinator>
-      </Expression>
-      <Expression xsi:type="rx:BehaviorSubject">
-        <Name>RewardAmount</Name>
       </Expression>
     </Nodes>
     <Edges>
-      <Edge From="1" To="4" Label="Source2" />
-      <Edge From="2" To="3" Label="Source1" />
-      <Edge From="3" To="4" Label="Source1" />
+      <Edge From="1" To="2" Label="Source1" />
+      <Edge From="3" To="6" Label="Source2" />
       <Edge From="4" To="5" Label="Source1" />
       <Edge From="5" To="6" Label="Source1" />
       <Edge From="6" To="7" Label="Source1" />
+      <Edge From="7" To="8" Label="Source1" />
       <Edge From="8" To="9" Label="Source1" />
       <Edge From="10" To="11" Label="Source1" />
     </Edges>
