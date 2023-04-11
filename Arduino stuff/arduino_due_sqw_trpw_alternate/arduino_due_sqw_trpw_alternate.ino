@@ -7,11 +7,11 @@ volatile int j = 0;
 
 const int goPin = 0; // pin for experiment
 
-const int cameraOutPin = 31;
+const int cameraOutPin = 2;
 
-const int cameraInPin = 33;       // pin for "all lines exposing"
-const int blueOutPin = 37;        // pin for blue's Gate1
-const int violetOutPin = 39;      // pin for purple's Gate1
+const int cameraInPin = 3;       // pin for "all lines exposing"
+const int blueOutPin = 4;        // pin for blue's Gate1
+const int violetOutPin = 5;      // pin for purple's Gate1
 const uint8_t rampLightPin = DAC1;  // pin for ramping light
 
 int flipflopState = 0;        
