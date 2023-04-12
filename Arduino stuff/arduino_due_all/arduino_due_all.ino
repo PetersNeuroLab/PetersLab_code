@@ -95,7 +95,7 @@ void loop() {
   GetBonsaiInput();
   ActivatePV();
 
-  delay(1);
+  // delay(1);
 
 }
 
