@@ -62,7 +62,7 @@ def process(value):
       </Expression>
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="FloatProperty">
-          <Value>1000</Value>
+          <Value>100</Value>
         </Combinator>
       </Expression>
       <Expression xsi:type="Combinator">
@@ -76,7 +76,7 @@ def process(value):
       </Expression>
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="IntProperty">
-          <Value>5000</Value>
+          <Value>500</Value>
         </Combinator>
       </Expression>
       <Expression xsi:type="rx:BehaviorSubject">
