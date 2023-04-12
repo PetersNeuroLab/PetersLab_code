@@ -82,6 +82,10 @@ def process(value):
       <Expression xsi:type="rx:BehaviorSubject">
         <Name>OpenValve</Name>
       </Expression>
+      <Expression xsi:type="io:CsvReader">
+        <io:FileName>C:\Water_calibration\calibration.csv</io:FileName>
+        <io:SkipRows>0</io:SkipRows>
+      </Expression>
     </Nodes>
     <Edges>
       <Edge From="2" To="3" Label="Source1" />
