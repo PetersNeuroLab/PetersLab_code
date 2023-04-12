@@ -10,7 +10,7 @@
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="io:CreateSerialPort">
           <io:Name>myArduino</io:Name>
-          <io:PortName>COM8</io:PortName>
+          <io:PortName>COM12</io:PortName>
           <io:BaudRate>250000</io:BaudRate>
           <io:Parity>None</io:Parity>
           <io:ParityReplace>63</io:ParityReplace>

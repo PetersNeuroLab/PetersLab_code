@@ -7,8 +7,6 @@ volatile int j = 0;
 
 const int goPin = 0; // pin for experiment
 
-const int SValvePin = 6; 
-
 const int cameraOutPin = 2;
 
 const int cameraInPin = 3;       // pin for "all lines exposing"
@@ -20,13 +18,24 @@ int flipflopState = 0;
 int lastPCOstate = 0;
 int currentPCOstate = 0;
 
+// variables for pintch valve of reward system
+const int SValvePin = 8;
+
+const byte numChars = 6;
+char receivedChars[numChars];   // an array to store the received data
+boolean newData = false;
+int TimeON = 0;             // new for this version
+int TempVar = 0;
+boolean TimerFinished = false;
+uint32_t StartTime = 0;      // variable to store temporary timestamps of previous iteration of the while loop
+
 void setup() {
 
   pinMode(goPin, INPUT);
   pinMode(cameraInPin, INPUT);
   pinMode(blueOutPin, OUTPUT);
   pinMode(violetOutPin, OUTPUT);
-  Serial.begin(250000);
+  SerialUSB.begin(250000);
   flipflopState = 0;
 
   analogWriteResolution(12);
@@ -86,6 +95,8 @@ void loop() {
   GetBonsaiInput();
   ActivatePV();
 
+  delay(1);
+
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -95,8 +106,8 @@ void GetBonsaiInput() { // part of code taken from http://forum.arduino.cc/index
   char endMarker = '\r';
   char rc;
 
-  if (Serial.available() > 0) {
-    rc = Serial.read();
+  if (SerialUSB.available() > 0) {
+    rc = SerialUSB.read();
 
     if (rc != endMarker) {
       receivedChars[ndx] = rc;
@@ -126,7 +137,7 @@ void ActivatePV() {
     newData = false;
   }
   if (TempVar == 1) {
-    // start checking the time and keep the valve open as long as you wish irrespective of what happens to Serial.read()
+    // start checking the time and keep the valve open as long as you wish irrespective of what happens to SerialUSB.read()
     if ((millis() - StartTime) <= (uint32_t)TimeON) {
       digitalWrite(SValvePin, HIGH); // open valve
       TimerFinished = false;
