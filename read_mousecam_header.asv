@@ -69,7 +69,7 @@ frame_num = bin2dec(bin_val_pixels);
 pin_state_pixels = embedded_pixels(33:36,:);
 bin_val_pixels = dec2bin(pin_state_pixels, 8);
 bin_val_pixels = reshape(bin_val_pixels', 32, n_frames)';
-flipper = logical(str2num(bin_val_pixels(:, flipper_pin+1))); % pin numbering starts from 0 
+flipper = logical(str2num(bin_val_pixels(:, flipper_pin-1))); % pin numbering starts from 0 
 
 
 
