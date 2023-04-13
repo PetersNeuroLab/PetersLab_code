@@ -1,5 +1,5 @@
-function [timestamps, frame_num, flipper] = read_mousecam_header(mousecam_header_fn, flipper_pin)
-% [timestamps, frame_num, flipper] = read_mousecam_header(mousecam_header_fn, flipper_pin)
+function mousecam_header = read_mousecam_header(mousecam_header_fn, flipper_pin)
+% mousecam_header = read_mousecam_header(mousecam_header_fn, flipper_pin)
 %
 % Get embedded info from face camera videos
 %
@@ -8,9 +8,10 @@ function [timestamps, frame_num, flipper] = read_mousecam_header(mousecam_header
 % flipper_pin - GPIO pin that the flipper is plugged into
 %
 % OUTPUTS
-% timestamps - timestamp of each frame
-% frame_num - number of each frame
-% flipper - flipper signal on each frame
+% mousecam_header - structure with:
+% .timestamps - timestamp of each frame
+% .frame_num - number of each frame
+% .flipper - flipper signal on each frame
 %
 % Embedded information: each component is 4 pixels (40 total) x n frames
 % (from: https://www.flir.co.uk/support-center/iis/machine-vision/knowledge-base/embedding-frame-specific-data-into-the-first-n-pixels-of-an-image/)
@@ -32,6 +33,12 @@ embedded_pixels = fread(fid,[40,Inf]);
 fclose(fid);
 
 n_frames = size(embedded_pixels,2);
+
+% Initialize header structure
+mousecam_header = struct( ...
+    'timestamps',cell(1), ...
+    'frame_num',cell(1), ...
+    'flipper',cell(1));
 
 %%  Timestamp
 
@@ -55,21 +62,21 @@ for i=1:length(reset_counter_idx)
 end % can replace this with a recursive function??? 
 
 % report timestamp in seconds
-timestamps = seconds';
+mousecam_header.timestamps = seconds';
 
 %% Frame counter
 
 frame_num_pixels = embedded_pixels(25:28,:);
 bin_val_pixels = dec2bin(frame_num_pixels, 8);
 bin_val_pixels = reshape(bin_val_pixels', 32, n_frames)';
-frame_num = bin2dec(bin_val_pixels);
+mousecam_header.frame_num = bin2dec(bin_val_pixels);
 
 %% GPIO pin states
 
 pin_state_pixels = embedded_pixels(33:36,:);
 bin_val_pixels = dec2bin(pin_state_pixels, 8);
 bin_val_pixels = reshape(bin_val_pixels', 32, n_frames)';
-flipper = logical(str2num(bin_val_pixels(:, flipper_pin+1))); % pin numbering starts from 0 
+mousecam_header.flipper = logical(str2num(bin_val_pixels(:, flipper_pin+1))); % pin numbering starts from 0 
 
 
 
