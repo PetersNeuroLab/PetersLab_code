@@ -1,13 +1,19 @@
-function [timestamps, frame_num, flipper] = read_mousecam_header(embed_pixels, pin_num)
-% [timestamps, frame_num, flipper] = read_mousecam_header(video_file, pin_num)
+function mousecam_header = read_mousecam_header(mousecam_header_fn, flipper_pin)
+% mousecam_header = read_mousecam_header(mousecam_header_fn, flipper_pin)
 %
 % Get embedded info from face camera videos
-
-% %% Probably want to add how to find the video in the folder too! - once we have a set name for it
-% video_file = dir(fullfile(video_path,'*.avi'));
-% video_fn = fullfile(video_path,video_file.name);
 %
-% Embedded information: each component is 4 pixels (40 total)
+% INPUTS
+% mousecam_header_fn - filename with mousecam header (mousecam_header.bin)
+% flipper_pin - GPIO pin that the flipper is plugged into
+%
+% OUTPUTS
+% mousecam_header - structure with:
+% .timestamps - timestamp of each frame
+% .frame_num - number of each frame
+% .flipper - flipper signal on each frame
+%
+% Embedded information: each component is 4 pixels (40 total) x n frames
 % (from: https://www.flir.co.uk/support-center/iis/machine-vision/knowledge-base/embedding-frame-specific-data-into-the-first-n-pixels-of-an-image/)
 % Timestamp
 % Gain 
@@ -20,17 +26,23 @@ function [timestamps, frame_num, flipper] = read_mousecam_header(embed_pixels, p
 % GPIO Pin State
 % ROI position
 
-% TO DO - update the indicies now that everything is embedded
+%% Load and reshape data
 
-% Requires embed_pixels which is 40 (4px x 10 items) x n frames
+fid = fopen(mousecam_header_fn,'r');
+embedded_pixels = fread(fid,[40,Inf]);
+fclose(fid);
 
-%% Embedded pixels
+n_frames = size(embedded_pixels,2);
 
-n_frames = size(embed_pixels,2);
+% Initialize header structure
+mousecam_header = struct( ...
+    'timestamps',cell(1), ...
+    'frame_num',cell(1), ...
+    'flipper',cell(1));
 
 %%  Timestamp
 
-timestamp_pixels = embed_pixels(1:4,:);
+timestamp_pixels = embedded_pixels(1:4,:);
 bin_val_pixels = dec2bin(timestamp_pixels, 8);
 bin_val_pixels = reshape(bin_val_pixels', 32, n_frames)';
 
@@ -50,21 +62,21 @@ for i=1:length(reset_counter_idx)
 end % can replace this with a recursive function??? 
 
 % report timestamp in seconds
-timestamps = seconds';
+mousecam_header.timestamps = seconds';
 
 %% Frame counter
 
-frame_num_pixels = embed_pixels(25:28,:);
+frame_num_pixels = embedded_pixels(25:28,:);
 bin_val_pixels = dec2bin(frame_num_pixels, 8);
 bin_val_pixels = reshape(bin_val_pixels', 32, n_frames)';
-frame_num = bin2dec(bin_val_pixels);
+mousecam_header.frame_num = bin2dec(bin_val_pixels);
 
 %% GPIO pin states
 
-pin_state_pixels = embed_pixels(33:36,:);
+pin_state_pixels = embedded_pixels(33:36,:);
 bin_val_pixels = dec2bin(pin_state_pixels, 8);
 bin_val_pixels = reshape(bin_val_pixels', 32, n_frames)';
-flipper = logical(str2num(bin_val_pixels(:, pin_num+1))); % pin numbering starts from 0 
+mousecam_header.flipper = logical(str2num(bin_val_pixels(:, flipper_pin+1))); % pin numbering starts from 0 
 
 
 
