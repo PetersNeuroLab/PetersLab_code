@@ -18,6 +18,12 @@ int flipflopState = 0;
 int lastPCOstate = 0;
 int currentPCOstate = 0;
 
+// variables for rotary encoder
+const int encoder0PinA = 31;        // sensor A of rotary encoder
+const int encoder0PinB = 33;        // sensor B of rotary encoder
+
+volatile signed int encoder0Pos = 0;    // variable for counting ticks of rotary encoder
+
 // variables for pintch valve of reward system
 const int SValvePin = 8;
 
@@ -47,6 +53,11 @@ void setup() {
   analogWrite(cameraOutPin,0);
 
   pinMode(SValvePin, OUTPUT);     // solenoid valve
+
+  pinMode(encoder0PinA, INPUT);   // rotary encoder sensor A
+  pinMode(encoder0PinB, INPUT);   // rotary encoder sensor B
+  // interrupts for rotary encoder
+  attachInterrupt(digitalPinToInterrupt(encoder0PinA), doEncoderA, FALLING);
 
 }
 
@@ -149,4 +160,18 @@ void ActivatePV() {
       TempVar = 0;
     }
   }
+}
+
+
+//////////////////////////////////////////////////////////////////////////
+// Interrupt on A low to high transition
+void doEncoderA() {
+    if (digitalRead(encoder0PinB)==LOW) {
+      encoder0Pos = - 1;
+    }
+    else {
+      encoder0Pos = 1;
+    }
+    SerialUSB.print(encoder0Pos);//
+    SerialUSB.print("\n");
 }
