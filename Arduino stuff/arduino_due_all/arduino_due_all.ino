@@ -19,8 +19,8 @@ int lastPCOstate = 0;
 int currentPCOstate = 0;
 
 // variables for rotary encoder
-const int encoder0PinA = 31;        // sensor A of rotary encoder
-const int encoder0PinB = 33;        // sensor B of rotary encoder
+const int encoder0PinA = 33;        // sensor A of rotary encoder
+const int encoder0PinB = 31;        // sensor B of rotary encoder
 
 volatile signed int encoder0Pos = 0;    // variable for counting ticks of rotary encoder
 
@@ -167,10 +167,10 @@ void ActivatePV() {
 // Interrupt on A low to high transition
 void doEncoderA() {
     if (digitalRead(encoder0PinB)==LOW) {
-      encoder0Pos = - 1;
+      encoder0Pos = 1;
     }
     else {
-      encoder0Pos = 1;
+      encoder0Pos = - 1;
     }
     SerialUSB.print(encoder0Pos);//
     SerialUSB.print("\n");
