@@ -4,7 +4,6 @@
                  xmlns:io="clr-namespace:Bonsai.IO;assembly=Bonsai.System"
                  xmlns:rx="clr-namespace:Bonsai.Reactive;assembly=Bonsai.Core"
                  xmlns:scr="clr-namespace:Bonsai.Scripting.Expressions;assembly=Bonsai.Scripting.Expressions"
-                 xmlns:wie="clr-namespace:Bonsai.Windows.Input;assembly=Bonsai.Windows.Input"
                  xmlns="https://bonsai-rx.org/2018/workflow">
   <Workflow>
     <Nodes>
@@ -59,7 +58,7 @@
       </Expression>
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="FloatProperty">
-          <Value>100</Value>
+          <Value>43.48</Value>
         </Combinator>
       </Expression>
       <Expression xsi:type="Combinator">
@@ -73,45 +72,48 @@
       </Expression>
       <Expression xsi:type="Combinator">
         <Combinator xsi:type="IntProperty">
-          <Value>500</Value>
+          <Value>217</Value>
         </Combinator>
       </Expression>
       <Expression xsi:type="rx:BehaviorSubject">
         <Name>TimeValveOpen</Name>
       </Expression>
+      <Expression xsi:type="SubscribeSubject">
+        <Name>TimeValveOpen</Name>
+      </Expression>
+      <Expression xsi:type="scr:ExpressionTransform">
+        <scr:Name>MakeString</scr:Name>
+        <scr:Description />
+        <scr:Expression>Convert.ToString(it)</scr:Expression>
+      </Expression>
       <Expression xsi:type="Combinator">
-        <Combinator xsi:type="wie:KeyDown">
-          <wie:Filter>W</wie:Filter>
-          <wie:SuppressRepetitions>false</wie:SuppressRepetitions>
+        <Combinator xsi:type="io:SerialStringWrite">
+          <io:PortName>myArduino</io:PortName>
+          <io:NewLine>\r</io:NewLine>
         </Combinator>
       </Expression>
-      <Expression xsi:type="rx:SelectMany">
-        <Name>OpenValve</Name>
-        <Workflow>
-          <Nodes>
-            <Expression xsi:type="SubscribeSubject">
-              <Name>TimeValveOpen</Name>
-            </Expression>
-            <Expression xsi:type="scr:ExpressionTransform">
-              <scr:Name>MakeString</scr:Name>
-              <scr:Description />
-              <scr:Expression>Convert.ToString(it)</scr:Expression>
-            </Expression>
-            <Expression xsi:type="Combinator">
-              <Combinator xsi:type="io:SerialStringWrite">
-                <io:PortName>myArduino</io:PortName>
-                <io:NewLine>\r</io:NewLine>
-              </Combinator>
-            </Expression>
-            <Expression xsi:type="WorkflowOutput" />
-          </Nodes>
-          <Edges>
-            <Edge From="0" To="1" Label="Source1" />
-            <Edge From="1" To="2" Label="Source1" />
-            <Edge From="2" To="3" Label="Source1" />
-          </Edges>
-        </Workflow>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="rx:Delay">
+          <rx:DueTime>PT0.5S</rx:DueTime>
+        </Combinator>
       </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="rx:Take">
+          <rx:Count>1</rx:Count>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="rx:RepeatCount">
+          <rx:Count>50</rx:Count>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="Combinator">
+        <Combinator xsi:type="IntProperty">
+          <Value>1</Value>
+        </Combinator>
+      </Expression>
+      <Expression xsi:type="rx:Accumulate" />
+      <Expression xsi:type="WorkflowOutput" />
     </Nodes>
     <Edges>
       <Edge From="2" To="3" Label="Source1" />
@@ -125,6 +127,13 @@
       <Edge From="11" To="12" Label="Source1" />
       <Edge From="12" To="13" Label="Source1" />
       <Edge From="14" To="15" Label="Source1" />
+      <Edge From="15" To="16" Label="Source1" />
+      <Edge From="16" To="17" Label="Source1" />
+      <Edge From="17" To="18" Label="Source1" />
+      <Edge From="18" To="19" Label="Source1" />
+      <Edge From="19" To="20" Label="Source1" />
+      <Edge From="20" To="21" Label="Source1" />
+      <Edge From="21" To="22" Label="Source1" />
     </Edges>
   </Workflow>
 </WorkflowBuilder>
