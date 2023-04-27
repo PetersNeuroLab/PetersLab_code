@@ -74,7 +74,8 @@ void loop() {
     if (j==512)
       j=0;
 
-    delayMicroseconds(27.9); // to slow it down so it's at 70Hz
+    // delayMicroseconds(27.9); // to slow it down so it's at 70Hz
+    delayMicroseconds(15); // to slow it down so it's at 70Hz
 
 
   } else {
