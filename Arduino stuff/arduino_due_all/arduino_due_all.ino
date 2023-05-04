@@ -17,6 +17,9 @@ const uint8_t rampLightPin = DAC1;  // pin for ramping light
 int flipflopState = 0;        
 int lastPCOstate = 0;
 int currentPCOstate = 0;
+int lastgoPinstate= 0;
+int currentgoPinstate= 0;
+
 
 // variables for rotary encoder
 const int encoder0PinA = 33;        // sensor A of rotary encoder
@@ -63,7 +66,13 @@ void setup() {
 
 void loop() {
 
-  if (digitalRead(goPin)==HIGH) {
+  currentgoPinstate = digitalRead(goPin);
+
+  if (currentgoPinstate==HIGH) {
+    if(lastgoPinstate==LOW) {
+      digitalWrite(blueOutPin, HIGH);
+    }
+
     digitalWrite(cameraOutPin, waveformsTable_sq_wave[i]);  // write the selected waveform on DAC
     i++;
     if (i==512)
@@ -77,7 +86,6 @@ void loop() {
     // delayMicroseconds(27.9); // to slow it down so it's at 70Hz
     delayMicroseconds(15); // to slow it down so it's at 70Hz
 
-
   } else {
     // If GO pin is low, write all pins to low
     digitalWrite(blueOutPin, LOW);
@@ -86,6 +94,9 @@ void loop() {
     analogWrite(rampLightPin,0);
     flipflopState = 0;
   }
+
+  lastgoPinstate = currentgoPinstate;
+  
 
   // Flip lights between blue and violet whenever cameraInPin goes low
   currentPCOstate = digitalRead(cameraInPin);
