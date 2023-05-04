@@ -69,9 +69,9 @@ void loop() {
   currentgoPinstate = digitalRead(goPin);
 
   if (currentgoPinstate==HIGH) {
-    if(lastgoPinstate==LOW) {
-      digitalWrite(blueOutPin, HIGH);
-    }
+    // if(lastgoPinstate==LOW) {
+    //   digitalWrite(blueOutPin, HIGH);
+    // }
 
     digitalWrite(cameraOutPin, waveformsTable_sq_wave[i]);  // write the selected waveform on DAC
     i++;
@@ -95,7 +95,7 @@ void loop() {
     flipflopState = 0;
   }
 
-  lastgoPinstate = currentgoPinstate;
+  // lastgoPinstate = currentgoPinstate;
   
 
   // Flip lights between blue and violet whenever cameraInPin goes low
