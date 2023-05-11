@@ -9,7 +9,7 @@ const int goPin = 0; // pin for experiment
 
 const int cameraOutPin = 2;
 
-const int cameraInPin = 3;       // pin for "all lines exposing"
+const int cameraInPin = 39;       // pin for "all lines exposing"
 const int blueOutPin = 4;        // pin for blue's Gate1
 const int violetOutPin = 5;      // pin for purple's Gate1
 const uint8_t rampLightPin = DAC1;  // pin for ramping light
@@ -38,7 +38,7 @@ void setup() {
 
 void loop() {
 
-  // if (digitalRead(goPin)==HIGH) {
+  if (digitalRead(goPin)==HIGH) {
     digitalWrite(cameraOutPin, waveformsTable_sq_wave[i]);  // write the selected waveform on DAC
     i++;
     if (i==512)
@@ -49,17 +49,17 @@ void loop() {
     if (j==512)
       j=0;
 
-    delayMicroseconds(27.9); // to slow it down so it's at 70Hz
+    delayMicroseconds(15); // to slow it down so it's at 70Hz
 
 
-  // } else {
-  //   // If GO pin is low, write all pins to low
-  //   digitalWrite(blueOutPin, LOW);
-  //   digitalWrite(violetOutPin, LOW);
-  //   digitalWrite(cameraOutPin, LOW);
-  //   analogWrite(rampLightPin,0);
-  //   flipflopState = 0;
-  // }
+  } else {
+    // If GO pin is low, write all pins to low
+    digitalWrite(blueOutPin, LOW);
+    digitalWrite(violetOutPin, LOW);
+    digitalWrite(cameraOutPin, LOW);
+    analogWrite(rampLightPin,0);
+    flipflopState = 0;
+  }
 
 // Flip lights between blue and violet whenever cameraInPin goes low
   currentPCOstate = digitalRead(cameraInPin);
