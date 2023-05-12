@@ -5,7 +5,7 @@
 volatile int i = 0;
 volatile int j = 0;
 
-const int goPin = 0; // pin for experiment
+const int goPin = 41; // pin for experiment
 
 const int cameraOutPin = 2;
 
